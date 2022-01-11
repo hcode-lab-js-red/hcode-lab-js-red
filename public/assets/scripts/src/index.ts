@@ -1,3 +1,4 @@
+import "./firebase";
 import "./forget";
 import "./login";
 import "./orders";
