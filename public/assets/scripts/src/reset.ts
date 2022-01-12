@@ -3,7 +3,7 @@ import { getAuth, confirmPasswordReset, signInWithEmailAndPassword } from "fireb
 import queryStringToJSON from "./functions/queryStringToJSON";
 
 const auth = getAuth();
-const form = document.querySelector<HTMLFormElement>("form-reset");
+const form = document.querySelector<HTMLFormElement>("#form-reset");
 
 if (form) {
 
