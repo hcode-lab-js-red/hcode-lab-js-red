@@ -11,10 +11,6 @@ if (form) {
 
         e.preventDefault();
 
-        const {value} = form.querySelector("[type=email]") as HTMLInputElement;
-
-        sessionStorage.setItem("email", value);
-
         const { password } = getFormValues(form);
         const { oobCode } = queryStringToJSON();
 

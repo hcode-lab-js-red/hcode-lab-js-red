@@ -40,3 +40,6 @@ if (formRegister) {
     });
 
 }
+
+import "./reset";
+import "./user";

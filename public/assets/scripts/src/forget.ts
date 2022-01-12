@@ -12,11 +12,14 @@ if (form) {
         const inputEmail = document.querySelector("#form-forget input") as HTMLInputElement;
 
         const email = inputEmail.value;
-
+        
+        
         if (email) {
-
+            
             sendPasswordResetEmail(auth, email)
             .then(() => {
+                
+                sessionStorage.setItem("email", email);
 
             })
             .catch((error) => console.error(error.message));
