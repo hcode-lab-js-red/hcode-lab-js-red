@@ -2,6 +2,7 @@ import getFormValues from "./functions/getFormValues";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const auth = getAuth();
+const errorMessage = document.querySelector(".message-register") as HTMLDivElement;
 
 const formRegister = document.querySelector<HTMLFormElement>("#form-register");
 
@@ -27,12 +28,13 @@ if (formRegister) {
                 }).catch(error => {
 
                     console.error(error.message);
-
+                    
                 });
-
+                
             })
             .catch((error) => {
                 console.error(error.message);
+                errorMessage.style.display = "block";
             });
 
     });

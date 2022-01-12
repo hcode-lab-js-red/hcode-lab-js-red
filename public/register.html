@@ -7,6 +7,25 @@
     <title>Cadastro - HBurguer</title>
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="shortcut icon" href="assets/images/logo-favicon-red.svg" type="image/x-icon" />
+    <style>
+        .message-register {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 16px;
+            background-color: brown;
+            color: #fff;
+            width: 290px;
+            border-radius: 5px;
+            display: block;
+        }
+        .message-register a {
+            color: inherit;
+        }
+        .message-register a:hover {
+            opacity: .75;
+        }
+    </style>
 </head>
 <body id="auth" class="auth">
     
@@ -36,6 +55,9 @@
     
         </form>
     </main>
+    <div class="message-register" style="display: none;">
+        Já existe uma conta cadastrada com este e-mail. <a href="login.html">Faça login</a> ou <a href="forget.html">recupere sua senha</a>.
+    </div>
     <script src="bundle.js"></script>
 </body>
 </html>
