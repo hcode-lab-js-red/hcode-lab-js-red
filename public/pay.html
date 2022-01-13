@@ -28,18 +28,18 @@
                 
                 <form>
 
-                    <input type="text" name="number" placeholder="Número do Cartão" />
+                    <input type="text" name="number" placeholder="Número do Cartão" id="number" required/>
 
                     <div class="fields">
                         <div class="field">
-                            <input type="text" name="validate" placeholder="Validade" />
+                            <input type="text" name="validate" placeholder="Validade" id="validate" required/>
                         </div>
                         <div class="field">
-                            <input type="text" name="code" placeholder="Código de Segurança" />
+                            <input type="text" name="code" placeholder="Código de Segurança" id="code" required/>
                         </div>
                     </div>
 
-                    <input type="text" name="name" placeholder="Nome" />
+                    <input type="text" name="name" placeholder="Nome" id="nome" required/>
 
                     <select name="bank">
                         <option>Nubank</option>
@@ -65,8 +65,7 @@
                 Confirmar Pagamento
             </button>
         </footer>
-
     </section>
-
+    <script src="bundle.js"></script>
 </body>
 </html>
