@@ -7,6 +7,25 @@
     <title>Criar nova senha - HBurguer</title>
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="shortcut icon" href="assets/images/logo-favicon-red.svg" type="image/x-icon" />
+    <style>
+        .password-changed {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 16px;
+            background-color: green;
+            color: #fff;
+            width: 290px;
+            border-radius: 5px;
+            display: block;
+        }
+        .password-changed a {
+            color: inherit;
+        }
+        .password-changed a:hover {
+            opacity: .75;
+        }
+    </style>
 </head>
 <body id="auth" class="auth">
     
@@ -36,6 +55,9 @@
     
         </form>
     </main>
+    <div class="password-changed">
+
+    </div>
     <script src="bundle.js"></script>
 </body>
 </html>

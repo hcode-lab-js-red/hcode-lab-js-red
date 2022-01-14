@@ -4,8 +4,7 @@ import "./login";
 import "./orders";
 import "./pay";
 import "./register";
+import "./reset";
+import "./user";
 import "./menu";
-
-console.log("Hello");
-
 import "./changePhoto";

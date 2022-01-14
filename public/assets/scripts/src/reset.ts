@@ -4,6 +4,7 @@ import queryStringToJSON from "./functions/queryStringToJSON";
 
 const auth = getAuth();
 const form = document.querySelector<HTMLFormElement>("#form-reset");
+const messagePassChanged = document.querySelector(".password-changed") as HTMLDivElement;
 
 if (form) {
 
@@ -22,6 +23,8 @@ if (form) {
                 if (email) {
 
                     signInWithEmailAndPassword(auth, email, password).then(()=> {
+
+                        messagePassChanged.style.display = "block";
 
                         location.href = "/";
 
