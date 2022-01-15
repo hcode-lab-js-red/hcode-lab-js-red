@@ -100,8 +100,6 @@ if(page){
          const breadGroup = breadEl.querySelector('[name=item]') as HTMLInputElement;
          const itemStringfy = JSON.stringify(bread)
          breadGroup.dataset.ingredients = itemStringfy;
-
-         getTheHamburger(breadGroup);
     });
 
 
@@ -128,61 +126,52 @@ if(page){
         const itemStringfy = JSON.stringify(ingredient)
         ingredientsGroup.dataset.ingredients = itemStringfy;
 
-        getTheHamburger(ingredientsGroup);
-
     });
 
-    // const orderService:Object[] = [];
+
     const orderService: OrderService = {
-        id:0,
-        bread:[],
+        bread: [],
         ingredients:[]
     }
 
-    function getTheHamburger(radioEls: HTMLInputElement){
-        radioEls?.addEventListener('click', (evt:Event)=>{
+    const allEls = page.querySelectorAll('[name=item]') as NodeList;
 
-            const radioEl = evt.target as HTMLInputElement;
-            // console.log(radioEls)
+    allEls.forEach(el=>{
+        el.addEventListener('click',(evt: Event)=>{
 
-            [radioEls].forEach((item, index)=>{
-                const itemMenu = item as HTMLInputElement;
-                if(itemMenu.checked){
-                    const validabread = itemMenu.dataset.ingredients;
-                    const validadeIngredients = itemMenu.dataset.ingredients;
+            let itemSelected    = evt.target as HTMLInputElement;
+            let jsonIngredients = JSON.parse(itemSelected.dataset.ingredients as string);
+            let jsonBread       = jsonIngredients;
 
-                    const jsonBread = JSON.parse(validabread as string);
-                    const jsonIngredient = JSON.parse(validadeIngredients as string);
-
-                    if(jsonBread){
-                        if(jsonBread.typeBread){
-                            // console.log(jsonBread)
-                            if(orderService.bread?.length === 1){
-                                orderService.bread?.pop()
-                                orderService.bread?.push(jsonBread)
-                            } else{
-                                orderService.bread?.push(jsonBread)
-                            }
-
-                        }
-                    }
-
-                    if(jsonIngredient){
-                        if(jsonIngredient.name){
-                            //   orderService.ingredients?.push(jsonIngredient);
-                            console.log(jsonIngredient)
-                        }
-                    }
-                } else if (itemMenu.checked === false){
-                    orderService.bread?.pop()
+            if(itemSelected.type === "radio"){
+                if(itemSelected.checked){
+                    orderService.bread?.pop();
+                    orderService.bread?.push(jsonBread)
                 }
-            })
+            }
 
-            console.log(orderService)
+            if(itemSelected.type === 'checkbox'){
+
+                if(itemSelected.checked){
+                    orderService.ingredients?.push(jsonIngredients)
+                } else{
+                    orderService.ingredients = orderService.ingredients?.filter(item=>{
+                        const itemid = item as any; //ver na consultoria
+                        // console.log(itemid.id); // test sucedido
+                        return itemid.id !== Number(itemSelected.value);
+                    });
+                }
+            }
+            console.log(orderService) // Mostra o pedido sendo feito
         })
-    }
+    })
 
-
-
+    const saveOrder = document.querySelector('#save-hamburger')
+    
+    saveOrder?.addEventListener('click', (evt: Event)=>{
+        const order = JSON.stringify(orderService);
+        
+        sessionStorage.setItem('order', order);
+    });
 
 }
