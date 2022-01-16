@@ -196,12 +196,20 @@ if(page){
     }
 
 
+    const orders: string[] = [];
+
+    function setOrdersStorange(){
+        const order = JSON.stringify({orderService});
+        orders.push(order);
+        const allOrders = JSON.stringify(orders);
+        sessionStorage.setItem('allOrders', allOrders);
+    }
+
     saveOrder?.addEventListener('click', (evt: Event)=>{
 
+        setOrdersStorange();
         validadeAlert();
 
-        const order = JSON.stringify(orderService);
-        sessionStorage.setItem('order', order);
     });
 
 }
