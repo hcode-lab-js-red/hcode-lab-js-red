@@ -23,6 +23,11 @@ if(page){
             typeBread:'Pão de Batata',
             price:2.5
         },
+        {
+            id:4,
+            typeBread:'Pão de Dinamite',
+            price:5
+        },
 
     ];
 
@@ -45,32 +50,38 @@ if(page){
         },
         {
             id:4,
-            name:"Carne Bovina 125g",
-            price:3
+            name:"Folha de Alface",
+            price:1
         },
         {
             id:5,
-            name:"Carne de Frango 125g",
-            price:2.5
+            name:"Tomate",
+            price:1
         },
         {
             id:6,
-            name:"Carne de Peixe 125g",
-            price:2
+            name:"Picles",
+            price:1
         },
         {
             id:7,
-            name:"Carne Bovina 125g",
-            price:3
-        },
-        {
-            id:8,
-            name:"Carne de Frango 125g",
+            name:"Queijo Cheddar 50g",
             price:2.5
         },
         {
+            id:8,
+            name:"Queijo Mussarela 50g",
+            price:2
+        },
+        {
             id:9,
-            name:"Carne de Peixe 125g",
+            name:"Molho Barbecue",
+            price:1.5
+        },
+
+        {
+            id:9,
+            name:"Molho da Casa",
             price:2
         },
 
@@ -196,10 +207,10 @@ if(page){
     }
 
 
-    const orders: string[] = [];
+    const orders: object[] = [];
 
     function setOrdersStorange(){
-        const order = JSON.stringify({orderService});
+        const order = {orderService};
         orders.push(order);
         const allOrders = JSON.stringify(orders);
         sessionStorage.setItem('allOrders', allOrders);
