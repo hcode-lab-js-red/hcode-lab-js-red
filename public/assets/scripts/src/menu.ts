@@ -8,8 +8,6 @@ const page = document.querySelector("#menu") as HTMLElement;
 
 if(page){
 
-    
-
     const breads:Bread[] = [{
             id:1,
             typeBread:'Pão Tradicional',
@@ -162,15 +160,47 @@ if(page){
                     });
                 }
             }
-            console.log(orderService) // Mostra o pedido sendo feito
+            // console.log(orderService) // Mostra o pedido sendo feito
         })
     })
 
-    const saveOrder = document.querySelector('#save-hamburger')
-    
+    const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
+
+    const alert = document.querySelector("#alert") as HTMLDivElement;
+    alert.classList.add('hiddenAlert');
+
+    const sucess = document.querySelector("#sucess") as HTMLDivElement;
+    sucess.classList.add('hiddenAlert');
+
+    function validadeAlert(){
+        if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
+            alert.classList.remove('hiddenAlert');
+            alert.classList.add('showAlert');
+            setInterval(()=>{
+                alert.classList.remove('showAlert');
+                alert.classList.add('hiddenAlert');
+            }, 5000)
+        } else {
+            alert.classList.remove('showAlert');
+            alert.classList.add('hiddenAlert');
+        }
+
+        if(orderService.bread?.length !== 0 && orderService.ingredients?.length !== 0){
+            sucess.classList.remove('hiddenAlert');
+            sucess.classList.add('showAlert');
+            setInterval(()=>{
+                sucess.classList.remove('showAlert');
+                sucess.classList.add('hiddenAlert');
+            }, 5000)
+        }
+    }
+
+
     saveOrder?.addEventListener('click', (evt: Event)=>{
+
+        validadeAlert();
+
         const order = JSON.stringify(orderService);
-        
         sessionStorage.setItem('order', order);
     });
 
