@@ -8,8 +8,6 @@ const page = document.querySelector("#menu") as HTMLElement;
 
 if(page){
 
-    
-
     const breads:Bread[] = [{
             id:1,
             typeBread:'Pão Tradicional',
@@ -24,6 +22,11 @@ if(page){
             id:3,
             typeBread:'Pão de Batata',
             price:2.5
+        },
+        {
+            id:4,
+            typeBread:'Pão de Dinamite',
+            price:5
         },
 
     ];
@@ -47,32 +50,38 @@ if(page){
         },
         {
             id:4,
-            name:"Carne Bovina 125g",
-            price:3
+            name:"Folha de Alface",
+            price:1
         },
         {
             id:5,
-            name:"Carne de Frango 125g",
-            price:2.5
+            name:"Tomate",
+            price:1
         },
         {
             id:6,
-            name:"Carne de Peixe 125g",
-            price:2
+            name:"Picles",
+            price:1
         },
         {
             id:7,
-            name:"Carne Bovina 125g",
-            price:3
-        },
-        {
-            id:8,
-            name:"Carne de Frango 125g",
+            name:"Queijo Cheddar 50g",
             price:2.5
         },
         {
+            id:8,
+            name:"Queijo Mussarela 50g",
+            price:2
+        },
+        {
             id:9,
-            name:"Carne de Peixe 125g",
+            name:"Molho Barbecue",
+            price:1.5
+        },
+
+        {
+            id:9,
+            name:"Molho da Casa",
             price:2
         },
 
@@ -100,8 +109,6 @@ if(page){
          const breadGroup = breadEl.querySelector('[name=item]') as HTMLInputElement;
          const itemStringfy = JSON.stringify(bread)
          breadGroup.dataset.ingredients = itemStringfy;
-
-         getTheHamburger(breadGroup);
     });
 
 
@@ -128,61 +135,120 @@ if(page){
         const itemStringfy = JSON.stringify(ingredient)
         ingredientsGroup.dataset.ingredients = itemStringfy;
 
-        getTheHamburger(ingredientsGroup);
-
     });
 
-    // const orderService:Object[] = [];
+
     const orderService: OrderService = {
-        id:0,
-        bread:[],
+        bread: [],
         ingredients:[]
     }
 
-    function getTheHamburger(radioEls: HTMLInputElement){
-        radioEls?.addEventListener('click', (evt:Event)=>{
+    const allEls = page.querySelectorAll('[name=item]') as NodeList;
 
-            const radioEl = evt.target as HTMLInputElement;
-            // console.log(radioEls)
+    allEls.forEach(el=>{
+        el.addEventListener('click',(evt: Event)=>{
 
-            [radioEls].forEach((item, index)=>{
-                const itemMenu = item as HTMLInputElement;
-                if(itemMenu.checked){
-                    const validabread = itemMenu.dataset.ingredients;
-                    const validadeIngredients = itemMenu.dataset.ingredients;
+            let itemSelected    = evt.target as HTMLInputElement;
+            let jsonIngredients = JSON.parse(itemSelected.dataset.ingredients as string);
+            let jsonBread       = jsonIngredients;
 
-                    const jsonBread = JSON.parse(validabread as string);
-                    const jsonIngredient = JSON.parse(validadeIngredients as string);
-
-                    if(jsonBread){
-                        if(jsonBread.typeBread){
-                            // console.log(jsonBread)
-                            if(orderService.bread?.length === 1){
-                                orderService.bread?.pop()
-                                orderService.bread?.push(jsonBread)
-                            } else{
-                                orderService.bread?.push(jsonBread)
-                            }
-
-                        }
-                    }
-
-                    if(jsonIngredient){
-                        if(jsonIngredient.name){
-                            //   orderService.ingredients?.push(jsonIngredient);
-                            console.log(jsonIngredient)
-                        }
-                    }
-                } else if (itemMenu.checked === false){
-                    orderService.bread?.pop()
+            if(itemSelected.type === "radio"){
+                if(itemSelected.checked){
+                    orderService.bread?.pop();
+                    orderService.bread?.push(jsonBread)
                 }
-            })
+            }
 
-            console.log(orderService)
+            if(itemSelected.type === 'checkbox'){
+
+                if(itemSelected.checked){
+                    orderService.ingredients?.push(jsonIngredients)
+                } else{
+                    orderService.ingredients = orderService.ingredients?.filter(item=>{
+                        const itemid = item as any; //ver na consultoria
+                        // console.log(itemid.id); // test sucedido
+                        return itemid.id !== Number(itemSelected.value);
+                    });
+                }
+            }
+            // console.log(orderService) // Mostra o pedido sendo feito
         })
+    })
+
+    const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
+
+    const alert = document.querySelector("#alert") as HTMLDivElement;
+    alert.classList.add('hiddenAlert');
+
+    const sucess = document.querySelector("#sucess") as HTMLDivElement;
+    sucess.classList.add('hiddenAlert');
+
+    function validadeAlert(){
+        console.log("verificar", orderService.bread)
+
+        if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
+            alert.classList.remove('hiddenAlert');
+            alert.classList.add('showAlert');
+            setInterval(()=>{
+                alert.classList.remove('showAlert');
+                alert.classList.add('hiddenAlert');
+            }, 5000)
+        } else {
+            alert.classList.remove('showAlert');
+            alert.classList.add('hiddenAlert');
+        }
+
+        if(orderService.bread?.length !== 0 && orderService.ingredients?.length !== 0){
+            sucess.classList.remove('hiddenAlert');
+            sucess.classList.add('showAlert');
+            setInterval(()=>{
+                sucess.classList.remove('showAlert');
+                sucess.classList.add('hiddenAlert');
+            }, 5000)
+        }
     }
 
 
+    const orders: object[] = [];
+
+    function setOrdersStorange(){
+        const order = {orderService};
+        orders.push(order);
+        const allOrders = JSON.stringify(orders);
+        sessionStorage.setItem('allOrders', allOrders);
+    }
+
+    saveOrder?.addEventListener('click', (evt: Event)=>{
+
+
+        setOrdersStorange();
+        validadeAlert();
+        sendAside();
+
+    });
+
+
+
+
+    function sendAside(){
+
+        const aside = document.querySelector('aside') as HTMLElement;
+        const listorderEl = aside.querySelector('section ul') as HTMLUListElement;
+        const orderEl = document.createElement('li');
+
+        orders.forEach((order, index)=>{
+            console.log(order);
+            orderEl.innerHTML = `
+            <div>Hamburguer ${index + 1 }</div>
+            <div>R$ 15,00</div>
+            <button type="button" aria-label="Remover Hamburguer 2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"></path>
+                </svg>
+            </button> `;
+            listorderEl.appendChild(orderEl);
+        });
+    }
 
 
 }
