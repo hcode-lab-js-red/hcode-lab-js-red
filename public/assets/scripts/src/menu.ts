@@ -184,6 +184,8 @@ if(page){
     sucess.classList.add('hiddenAlert');
 
     function validadeAlert(){
+        console.log("verificar", orderService.bread)
+
         if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
             alert.classList.remove('hiddenAlert');
             alert.classList.add('showAlert');
@@ -218,9 +220,35 @@ if(page){
 
     saveOrder?.addEventListener('click', (evt: Event)=>{
 
+
         setOrdersStorange();
         validadeAlert();
+        sendAside();
 
     });
+
+
+
+
+    function sendAside(){
+
+        const aside = document.querySelector('aside') as HTMLElement;
+        const listorderEl = aside.querySelector('section ul') as HTMLUListElement;
+        const orderEl = document.createElement('li');
+
+        orders.forEach((order, index)=>{
+            console.log(order);
+            orderEl.innerHTML = `
+            <div>Hamburguer ${index + 1 }</div>
+            <div>R$ 15,00</div>
+            <button type="button" aria-label="Remover Hamburguer 2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"></path>
+                </svg>
+            </button> `;
+            listorderEl.appendChild(orderEl);
+        });
+    }
+
 
 }
