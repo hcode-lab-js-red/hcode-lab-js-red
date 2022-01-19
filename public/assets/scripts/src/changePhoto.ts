@@ -1,34 +1,34 @@
-const avatarImg = document.querySelector("#avatar-img") as HTMLImageElement;
-const buttonAvatar = document.querySelector("#avatar") as HTMLElement;
-const inputFile = document.querySelector("#file") as HTMLInputElement;
+// const avatarImg = document.querySelector("#avatar-img") as HTMLImageElement;
+// const buttonAvatar = document.querySelector("#avatar") as HTMLElement;
+// const inputFile = document.querySelector("#file") as HTMLInputElement;
 
-buttonAvatar.addEventListener("click", () => {
-    inputFile.click();
-});
+// buttonAvatar.addEventListener("click", () => {
+//     inputFile.click();
+// });
     
-inputFile.addEventListener("change", () => {
+// inputFile.addEventListener("change", () => {
 
-    if (inputFile.files?.length) {
+//     if (inputFile.files?.length) {
     
-        const file = inputFile.files[0];   
+//         const file = inputFile.files[0];   
 
-        const reader = new FileReader();
+//         const reader = new FileReader();
 
-        //inputFile.disabled = false;
+//         //inputFile.disabled = false;
 
-        reader.onload = () => {
+//         reader.onload = () => {
 
-            //inputFile.disabled = true;
+//             //inputFile.disabled = true;
 
-            if (reader.result) {
+//             if (reader.result) {
 
-                avatarImg.src = reader.result as string;
+//                 avatarImg.src = reader.result as string;
 
-            }
+//             }
 
-        }
+//         }
 
-        reader.readAsDataURL(file);
+//         reader.readAsDataURL(file);
 
-    }   
-});
+//     }   
+// });

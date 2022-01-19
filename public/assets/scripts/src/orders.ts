@@ -44,7 +44,15 @@ if(pageOrders) {
             
             item.priceFormated = formatCurrency(item.price);
 
-            appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
+            if(auth.currentUser) {
+
+                if (item.uid === auth.currentUser.uid) {
+    
+                    appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
+                }
+            }
+
+
             
 
         });
