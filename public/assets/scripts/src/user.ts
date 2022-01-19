@@ -56,7 +56,9 @@ if (profile) {
         } else {
 
             imgPreview.src = auth.currentUser.photoURL ?? "assets/images/user.svg";
-            imgAvatar.src = auth.currentUser.photoURL ?? "assets/images/user.svg";
+            if(imgAvatar) {
+                imgAvatar.src = auth.currentUser.photoURL ?? "assets/images/user.svg";
+            }
 
 
             inputName.value = auth.currentUser.displayName ?? "";
