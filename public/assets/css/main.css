@@ -835,4 +835,54 @@ body, div, section, main, article, header, footer, form, label {
   }
 }
 
+#app section.page.profile img#photo-preview,
+#app section.page.profile img#avatar {
+  margin: 25px auto;
+  border: 1px solid var(--white);
+  background-color: var(--white);
+  border-radius: 50%;
+}
+#app section.page.profile .button-logout {
+  background-color: red;
+  color: var(--white);
+  padding: 10px;
+  display: block;
+  max-width: 250px;
+  margin: 10px auto;
+  position: relative;
+  z-index: 12;
+}
+#app section.page.profile footer {
+  background-color: transparent;
+}
+#app section.page.profile button {
+  background-color: #ea0f0f;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--white);
+  height: 48px;
+  min-width: 110px;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(221, 14, 14, 0.25);
+  margin-top: var(--space);
+  font-weight: bold;
+}
+#app section.page.profile button:hover {
+  background-color: #f12020;
+  box-shadow: 0 0 10px var(--primary);
+}
+#app section.page.profile button:active {
+  background-color: var(--light);
+  color: var(--dark);
+  transition-duration: 0.05s;
+  box-shadow: 0 0 5px var(--primary);
+}
+@media (min-width: 768px) {
+  #app section.page.profile #form-update {
+    min-width: 400px;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */

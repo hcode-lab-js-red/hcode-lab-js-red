@@ -39,16 +39,12 @@ nome.addEventListener("keyup", (e) => {
         },
     },
 });
-/*
-------------------
-page.querySelectorAll("input").forEach((input) => {
-  input.addEventListener("focus", (e) => {
-    page.classList.add("keyboard-open");
-  });
-});
-
-page.querySelectorAll("input").forEach((input) => {
-  input.addEventListener("blur", (e) => {
-    page.classList.remove("keyboard-open");
-  });
-});*/ 
+const footer = document.querySelector("#send-pay");
+if (footer) {
+    footer.addEventListener("click", e => {
+        console.log("teste");
+    });
+}
+//captura a URL atual--- copiar o valor do pedido
+const queryString = location.search;
+console.log((0, queryStringToJSON_1.default)());

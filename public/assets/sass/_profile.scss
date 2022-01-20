@@ -1,0 +1,36 @@
+@use "components";
+@use "colors";
+#app {
+    section.page.profile {
+        img#photo-preview,
+        img#avatar {
+            margin: 25px auto;
+            border: 1px solid var(--white);
+            background-color: var(--white);
+            border-radius: 50%;
+        }
+        .button-logout {
+            background-color: red;
+            color: var(--white);
+            padding: 10px;
+            display: block;
+            max-width: 250px;
+            margin: 10px auto;
+            position: relative;
+            z-index: 12;
+        }
+        footer {
+            background-color: transparent
+        }
+        button {
+            @include components.button(colors.$primary);
+            margin-top: var(--space);
+            font-weight: bold;
+        }
+        @media (min-width:768px) {
+            #form-update {
+                min-width: 400px;
+            }
+        }
+    }
+}

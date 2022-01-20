@@ -5,4 +5,5 @@ export type OrdersService = {
     items: number;
     priceFormated: string;
     dateFormated: string;
+    uid: string;
 }
