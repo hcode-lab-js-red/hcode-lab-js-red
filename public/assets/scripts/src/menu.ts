@@ -1,11 +1,13 @@
+import appendChild from "./functions/appendChild";
 import formatCurrency from "./functions/formatCurrency";
+import { AnyObject } from "./types/anyObject";
 import { Bread } from "./types/bread";
 import { Ingredient } from "./types/ingredient";
 import { OrderService } from "./types/orderService";
 
 
 const page = document.querySelector("#menu") as HTMLElement;
-
+const formCreateHamburger = document.querySelector('#create-hamburger') as HTMLFormElement;
 if(page){
 
     const breads:Bread[] = [{
@@ -80,175 +82,166 @@ if(page){
         },
 
         {
-            id:9,
+            id:10,
             name:"Molho da Casa",
             price:2
         },
 
     ];
 
+    
+    let orders: string[] = [];
+    let idClick: number = 0;
+    const orderService: OrderService = {
+            id: idClick,
+            bread: [],
+            ingredients: []
+        };
 
-    const listBreads = page.querySelector("#breads ul")as HTMLLIElement;
-          listBreads.innerHTML = "";
+    // listar pães
+    const listBreads = page.querySelector("#breads ul") as HTMLLIElement;
+    listBreads.innerHTML = "";
 
-    breads.forEach(bread=>{
+    const renderBreads = () => {
 
-        const breadEl = document.createElement('li') as HTMLLIElement;
+        breads.forEach(bread =>{
+            const breadEl = document.createElement('li') as HTMLLIElement;
 
-        breadEl.innerHTML = `
-        <label>
-            <input type="radio" name="item" value="${bread.id}" data-ingredients/>
-            <span></span>
-            <h3>${bread.typeBread}</h3>
-            <div>${formatCurrency(bread.price)}</div>
-        </label>
-        `;
+            breadEl.innerHTML = `
+                <label>
+                    <input type="radio" name="item" value="${bread.id}" data-ingredients/>
+                    <span></span>
+                    <h3>${bread.typeBread}</h3>
+                    <div>${formatCurrency(bread.price)}</div>
+                </label>
+                `;
 
-         listBreads.appendChild(breadEl);
+            listBreads.appendChild(breadEl);
+        });
+    };
 
-         const breadGroup = breadEl.querySelector('[name=item]') as HTMLInputElement;
-         const itemStringfy = JSON.stringify(bread)
-         breadGroup.dataset.ingredients = itemStringfy;
-    });
-
+    //listar ingredients
 
     const listIngredients = page.querySelector("#ingredients ul")as HTMLLIElement;
           listIngredients.innerHTML = "";
 
-    ingredients.forEach(ingredient=>{
+    const renderIngredients = () => {
+        ingredients.forEach(ingredient=>{
 
-        const ingredienteEl = document.createElement('li') as HTMLLIElement;
+            const ingredienteEl = document.createElement('li') as HTMLLIElement;
 
-        ingredienteEl.innerHTML= `
-        <label>
-            <input type="checkbox" name="item" value="${ingredient.id}" />
-            <span></span>
-            <h3>${ingredient.name}</h3>
-            <div>${formatCurrency(ingredient.price)}</div>
-        </label>
-        `;
+            ingredienteEl.innerHTML= `
+            <label>
+                <input type="checkbox" name="item" value="${ingredient.id}" />
+                <span></span>
+                <h3>${ingredient.name}</h3>
+                <div>${formatCurrency(ingredient.price)}</div>
+            </label>
+            `;
 
-        listIngredients.appendChild(ingredienteEl);
+            const ingredientsGroup = ingredienteEl.querySelector('[name=item]') as HTMLInputElement;
 
-        const ingredientsGroup = ingredienteEl.querySelector('[name=item]') as HTMLInputElement;
+            const itemStringfy = JSON.stringify(ingredient)
+            ingredientsGroup.dataset.ingredients = itemStringfy;
 
-        const itemStringfy = JSON.stringify(ingredient)
-        ingredientsGroup.dataset.ingredients = itemStringfy;
-
-    });
-
-
-    const orderService: OrderService = {
-        bread: [],
-        ingredients:[]
+            listIngredients.appendChild(ingredienteEl);
+        });
     }
+
+    renderBreads();
+    renderIngredients();
 
     const allEls = page.querySelectorAll('[name=item]') as NodeList;
 
     allEls.forEach(el=>{
-        el.addEventListener('click',(evt: Event)=>{
 
-            let itemSelected    = evt.target as HTMLInputElement;
-            let jsonIngredients = JSON.parse(itemSelected.dataset.ingredients as string);
-            let jsonBread       = jsonIngredients;
+        el.addEventListener('change', (evt: Event)=>{
 
-            if(itemSelected.type === "radio"){
-                if(itemSelected.checked){
-                    orderService.bread?.pop();
-                    orderService.bread?.push(jsonBread)
+            const elSelected = evt.target as HTMLInputElement;
+
+            if(elSelected.type === "radio"){
+                if(elSelected.checked){
+                    orderService.bread = [];
+                    orderService.id = idClick++;
+                    orderService.bread?.push(Number(elSelected.value));
                 }
             }
 
-            if(itemSelected.type === 'checkbox'){
-
-                if(itemSelected.checked){
-                    orderService.ingredients?.push(jsonIngredients)
+            if(elSelected.type === "checkbox"){
+                if(elSelected.checked){
+                    orderService.ingredients?.push(Number(elSelected.value));
                 } else{
-                    orderService.ingredients = orderService.ingredients?.filter(item=>{
-                        const itemid = item as any; //ver na consultoria
-                        // console.log(itemid.id); // test sucedido
-                        return itemid.id !== Number(itemSelected.value);
+
+                    orderService.ingredients = orderService.ingredients?.filter(id =>{
+                        return id !== Number(elSelected.value);
                     });
+
+                    return false;
                 }
             }
-            // console.log(orderService) // Mostra o pedido sendo feito
+
         })
-    })
-
-    const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
-
-    const alert = document.querySelector("#alert") as HTMLDivElement;
-    alert.classList.add('hiddenAlert');
-
-    const sucess = document.querySelector("#sucess") as HTMLDivElement;
-    sucess.classList.add('hiddenAlert');
-
-    function validadeAlert(){
-        console.log("verificar", orderService.bread)
-
-        if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
-            alert.classList.remove('hiddenAlert');
-            alert.classList.add('showAlert');
-            setInterval(()=>{
-                alert.classList.remove('showAlert');
-                alert.classList.add('hiddenAlert');
-            }, 5000)
-        } else {
-            alert.classList.remove('showAlert');
-            alert.classList.add('hiddenAlert');
-        }
-
-        if(orderService.bread?.length !== 0 && orderService.ingredients?.length !== 0){
-            sucess.classList.remove('hiddenAlert');
-            sucess.classList.add('showAlert');
-            setInterval(()=>{
-                sucess.classList.remove('showAlert');
-                sucess.classList.add('hiddenAlert');
-            }, 5000)
-        }
-    }
-
-
-    const orders: object[] = [];
-
-    function setOrdersStorange(){
-        const order = {orderService};
-        orders.push(order);
-        const allOrders = JSON.stringify(orders);
-        sessionStorage.setItem('allOrders', allOrders);
-    }
-
-    saveOrder?.addEventListener('click', (evt: Event)=>{
-
-
-        setOrdersStorange();
-        validadeAlert();
-        sendAside();
-
     });
 
 
+    function sendLocalStorange(){
+        if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
+            return false;
+        } else{
+            orders.push(JSON.stringify(orderService as object) as string);
+            const orderString = orderService; // transfdrmar em strigfy
 
+            const jsonOrders = JSON.stringify(orders);
+            localStorage.setItem('allOrders', jsonOrders);
+        }
 
-    function sendAside(){
-
-        const aside = document.querySelector('aside') as HTMLElement;
-        const listorderEl = aside.querySelector('section ul') as HTMLUListElement;
-        const orderEl = document.createElement('li');
-
-        orders.forEach((order, index)=>{
-            console.log(order);
-            orderEl.innerHTML = `
-            <div>Hamburguer ${index + 1 }</div>
-            <div>R$ 15,00</div>
-            <button type="button" aria-label="Remover Hamburguer 2">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"></path>
-                </svg>
-            </button> `;
-            listorderEl.appendChild(orderEl);
-        });
     }
 
 
+    const aside = document.querySelector('aside') as HTMLElement;
+
+    const orderElList = aside.querySelector('ul#orderList') as HTMLUListElement;
+    orderElList.innerHTML = '';
+
+    const tray = aside.querySelector('header small') as HTMLElement;
+    tray.innerText = "esta vazia.";
+
+    const renderTray  = () =>{
+
+        let ordersFiltered = orders.filter(order=>{
+            const selectOrder = JSON.parse(order as string);
+            return selectOrder.bread.length !== 0 && selectOrder.ingredients.length !== 0;
+        }); // retorna array filtrado já
+
+        if(ordersFiltered.length === 0){
+            tray.innerText = "esta vazia."
+        } else {
+            tray.innerText = `${(ordersFiltered.length)} hamburguer(s)`;
+        }
+        console.log('osf', ordersFiltered);
+    };
+
+    const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
+
+    saveOrder?.addEventListener('click', ()=>{
+        sendLocalStorange();
+        formCreateHamburger.reset();
+
+        allEls.forEach(el=>{
+            const elSelect = el as HTMLInputElement;
+            if(elSelect.checked === false){
+                orderService.id = idClick++;
+                orderService.bread = [];
+                orderService.ingredients = [];
+            }
+        });
+
+        renderTray();
+    });
+
+    
 }
+
+
+
+
