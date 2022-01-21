@@ -1,5 +1,5 @@
 export type OrderService = {
     id: number;
-    bread?: number[];
-    ingredients?:number[];
+    bread?: object[];
+    ingredients?:object[];
 }

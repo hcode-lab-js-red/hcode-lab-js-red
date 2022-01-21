@@ -90,7 +90,7 @@ if(page){
     ];
 
     
-    let orders: string[] = [];
+    let orders: object[] = [];
     let idClick: number = 0;
     const orderService: OrderService = {
             id: idClick,
@@ -116,6 +116,10 @@ if(page){
                 </label>
                 `;
 
+            const breadGroup = breadEl.querySelector('[name=item]') as HTMLInputElement;
+            const itemStringfy = JSON.stringify(bread);
+            breadGroup.dataset.ingredients = itemStringfy;
+
             listBreads.appendChild(breadEl);
         });
     };
@@ -132,7 +136,7 @@ if(page){
 
             ingredienteEl.innerHTML= `
             <label>
-                <input type="checkbox" name="item" value="${ingredient.id}" />
+                <input type="checkbox" name="item" value="${ingredient.id}" data-ingredients />
                 <span></span>
                 <h3>${ingredient.name}</h3>
                 <div>${formatCurrency(ingredient.price)}</div>
@@ -163,19 +167,30 @@ if(page){
                 if(elSelected.checked){
                     orderService.bread = [];
                     orderService.id = idClick++;
-                    orderService.bread?.push(Number(elSelected.value));
+                    const jsonBread = JSON.parse(elSelected.dataset.ingredients as string);
+                    orderService.bread?.push(jsonBread);
                 }
             }
 
             if(elSelected.type === "checkbox"){
                 if(elSelected.checked){
-                    orderService.ingredients?.push(Number(elSelected.value));
+                    const jsonIngredients = JSON.parse(elSelected.dataset.ingredients as string);
+                    orderService.ingredients?.push(jsonIngredients);
                 } else{
 
-                    orderService.ingredients = orderService.ingredients?.filter(id =>{
-                        return id !== Number(elSelected.value);
-                    });
+                    // orderService.ingredients = orderService.ingredients?.filter(id =>{
+                    //     const idSelected = id as object;
+                    //     console.log('idSelect', idSelected);
+                    //     // return id !== Number(elSelected.value);
+                    // orderService.ingredients
+                    // });
 
+                    orderService.ingredients = orderService.ingredients?.filter(item=>{
+                        const itemid = item as any; //ver na consultoria
+                                    // console.log(itemid.id); // test sucedido
+                        return itemid.id !== Number(elSelected.value);
+                    });
+                    
                     return false;
                 }
             }
@@ -188,7 +203,7 @@ if(page){
         if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
             return false;
         } else{
-            orders.push(JSON.stringify(orderService as object) as string);
+            orders.push(orderService as object);
             const orderString = orderService; // transfdrmar em strigfy
 
             const jsonOrders = JSON.stringify(orders);
@@ -209,7 +224,7 @@ if(page){
     const renderTray  = () =>{
 
         let ordersFiltered = orders.filter(order=>{
-            const selectOrder = JSON.parse(order as string);
+            const selectOrder = order as AnyObject;
             return selectOrder.bread.length !== 0 && selectOrder.ingredients.length !== 0;
         }); // retorna array filtrado já
 
@@ -218,12 +233,20 @@ if(page){
         } else {
             tray.innerText = `${(ordersFiltered.length)} hamburguer(s)`;
         }
-        console.log('osf', ordersFiltered);
+
     };
+
+    const getLocalStorange = ()=>{
+        const localAllOders = JSON.parse(localStorage.getItem('allOrders') as string);
+        console.log(localAllOders)
+        
+    }
 
     const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
 
     saveOrder?.addEventListener('click', ()=>{
+
+        
         sendLocalStorange();
         formCreateHamburger.reset();
 
@@ -235,11 +258,12 @@ if(page){
                 orderService.ingredients = [];
             }
         });
-
+        
         renderTray();
+        getLocalStorange();
     });
 
-    
+
 }
 
 
