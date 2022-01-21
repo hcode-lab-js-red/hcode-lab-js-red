@@ -6,8 +6,12 @@ import { numberOfInstallments } from "./types/numberOfInstallments";
 import IMask from "imask";
 import appendChild from "./functions/appendChild";
 
-const page = document.querySelector(".page") as HTMLElement;
+const page = document.querySelector(".page-pay") as HTMLElement;
 
+
+if(page){
+
+  
 const form = page.querySelector("form") as HTMLFormElement;
 const nome = page.querySelector("#nome") as HTMLInputElement;
 const number = page.querySelector("#number") as HTMLInputField;
@@ -49,9 +53,6 @@ IMask(validate, {
     },
   },
 });
-
-
-if(page){
 
   const footer = document.querySelector<HTMLElement>("#send-pay");
 
