@@ -95,8 +95,9 @@ if(page){
     const orderService: OrderService = {
             id: idClick,
             bread: [],
-            ingredients: []
+            ingredients: [],
         };
+
 
     // listar pães
     const listBreads = page.querySelector("#breads ul") as HTMLLIElement;
@@ -260,7 +261,7 @@ if(page){
         });
         
         renderTray();
-        getLocalStorange();
+        
     });
 
 
