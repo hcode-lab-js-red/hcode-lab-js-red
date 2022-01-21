@@ -1,3 +1,4 @@
+import { hu } from "date-fns/locale";
 import appendChild from "./functions/appendChild";
 import formatCurrency from "./functions/formatCurrency";
 import { AnyObject } from "./types/anyObject";
@@ -10,24 +11,24 @@ const page = document.querySelector("#menu") as HTMLElement;
 const formCreateHamburger = document.querySelector('#create-hamburger') as HTMLFormElement;
 if(page){
 
-    const breads:Bread[] = [{
+    const breads:Ingredient[] = [{
             id:1,
-            typeBread:'Pão Tradicional',
+            name:'Pão Tradicional',
             price:2
         },
         {
             id:2,
-            typeBread:'Pão Australiano',
+            name:'Pão Australiano',
             price:3
         },
         {
             id:3,
-            typeBread:'Pão de Batata',
+            name:'Pão de Batata',
             price:2.5
         },
         {
             id:4,
-            typeBread:'Pão de Dinamite',
+            name:'Pão de Dinamite',
             price:5
         },
 
@@ -89,15 +90,7 @@ if(page){
 
     ];
 
-    
-    let orders: object[] = [];
-    let idClick: number = 0;
-    const orderService: OrderService = {
-            id: idClick,
-            bread: [],
-            ingredients: [],
-        };
-
+ 
 
     // listar pães
     const listBreads = page.querySelector("#breads ul") as HTMLLIElement;
@@ -112,7 +105,7 @@ if(page){
                 <label>
                     <input type="radio" name="item" value="${bread.id}" data-ingredients/>
                     <span></span>
-                    <h3>${bread.typeBread}</h3>
+                    <h3>${bread.name}</h3>
                     <div>${formatCurrency(bread.price)}</div>
                 </label>
                 `;
@@ -156,64 +149,6 @@ if(page){
     renderBreads();
     renderIngredients();
 
-    const allEls = page.querySelectorAll('[name=item]') as NodeList;
-
-    allEls.forEach(el=>{
-
-        el.addEventListener('change', (evt: Event)=>{
-
-            const elSelected = evt.target as HTMLInputElement;
-
-            if(elSelected.type === "radio"){
-                if(elSelected.checked){
-                    orderService.bread = [];
-                    orderService.id = idClick++;
-                    const jsonBread = JSON.parse(elSelected.dataset.ingredients as string);
-                    orderService.bread?.push(jsonBread);
-                }
-            }
-
-            if(elSelected.type === "checkbox"){
-                if(elSelected.checked){
-                    const jsonIngredients = JSON.parse(elSelected.dataset.ingredients as string);
-                    orderService.ingredients?.push(jsonIngredients);
-                } else{
-
-                    // orderService.ingredients = orderService.ingredients?.filter(id =>{
-                    //     const idSelected = id as object;
-                    //     console.log('idSelect', idSelected);
-                    //     // return id !== Number(elSelected.value);
-                    // orderService.ingredients
-                    // });
-
-                    orderService.ingredients = orderService.ingredients?.filter(item=>{
-                        const itemid = item as any; //ver na consultoria
-                                    // console.log(itemid.id); // test sucedido
-                        return itemid.id !== Number(elSelected.value);
-                    });
-                    
-                    return false;
-                }
-            }
-
-        })
-    });
-
-
-    function sendLocalStorange(){
-        if(orderService.bread?.length === 0 || orderService.ingredients?.length === 0){
-            return false;
-        } else{
-            orders.push(orderService as object);
-            const orderString = orderService; // transfdrmar em strigfy
-
-            const jsonOrders = JSON.stringify(orders);
-            localStorage.setItem('allOrders', jsonOrders);
-        }
-
-    }
-
-
     const aside = document.querySelector('aside') as HTMLElement;
 
     const orderElList = aside.querySelector('ul#orderList') as HTMLUListElement;
@@ -224,46 +159,86 @@ if(page){
 
     const renderTray  = () =>{
 
-        let ordersFiltered = orders.filter(order=>{
-            const selectOrder = order as AnyObject;
-            return selectOrder.bread.length !== 0 && selectOrder.ingredients.length !== 0;
-        }); // retorna array filtrado já
+        const currentTray = getLocalStorange();
+        let totalTray = 0;
 
-        if(ordersFiltered.length === 0){
-            tray.innerText = "esta vazia."
-        } else {
-            tray.innerText = `${(ordersFiltered.length)} hamburguer(s)`;
-        }
+        orderElList.innerHTML = "";
+
+        currentTray.forEach((hamburger, index) =>{
+            const hamburgerEl = document.createElement("li");
+
+            const totalHamburger = hamburger.map(ingredient=> ingredient.price).reduce((a, b)=> a + b, 0);
+
+            totalTray += totalHamburger;
+
+            hamburgerEl.innerHTML = `
+
+                <div>Hamburguer ${(index + 1)}</div>
+                <div> ${formatCurrency(totalHamburger)}</div>
+                <button type="button" aria-label="Remover Hamburguer 1">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"/>
+                    </svg>
+                </button>
+                
+            `;
+
+            orderElList.appendChild(hamburgerEl);
+        });
+
+        const totalEl = document.querySelector("#total-tray") as HTMLSpanElement;
+
+        totalEl.innerText = formatCurrency(totalTray);
+        
 
     };
 
-    const getLocalStorange = ()=>{
-        const localAllOders = JSON.parse(localStorage.getItem('allOrders') as string);
-        console.log(localAllOders)
-        
+    const getLocalStorange = ():(Ingredient[])[]=>{
+       
+        try{
+            const localAllOders = JSON.parse(localStorage.getItem('allOrders') as string);
+            if(!localAllOders){
+                return [] as (Ingredient[])[];
+            }
+            return localAllOders as (Ingredient[])[];
+        }catch(err){
+            console.error(err);
+            return [] as (Ingredient[])[];
+        }
+
     }
 
     const saveOrder = document.querySelector('#save-hamburger') as HTMLButtonElement;
 
     saveOrder?.addEventListener('click', ()=>{
 
-        
-        sendLocalStorange();
-        formCreateHamburger.reset();
+        const allEls = page.querySelectorAll('[name=item]') as NodeList;
+
+        // sendLocalStorange();
+        const hamburger: Ingredient[] = [];
+        const currentTray = getLocalStorange();
 
         allEls.forEach(el=>{
             const elSelect = el as HTMLInputElement;
-            if(elSelect.checked === false){
-                orderService.id = idClick++;
-                orderService.bread = [];
-                orderService.ingredients = [];
+
+            if(elSelect.checked){
+                const jsonIngredient: Ingredient = JSON.parse(elSelect.dataset.ingredients as string);
+                hamburger.push(jsonIngredient);
             }
+
         });
         
+        currentTray.push(hamburger); //coloca na bandeja
+
+        localStorage.setItem("allOrders", JSON.stringify(currentTray));
+
+        formCreateHamburger.reset();
+
         renderTray();
-        
+
     });
 
+    
 
 }
 
