@@ -73,15 +73,11 @@ if (profile) {
                     dados.push(doc.data() as Dados);
                 });
 
-
                 renderDados();
 
-        
-        
             });
         
             const renderDados = () => {
-
                  
                     dados.forEach(item => {
 
@@ -95,11 +91,6 @@ if (profile) {
                         }
     
                     });
-                   
-                
-            
-                
-        
             }
 
 

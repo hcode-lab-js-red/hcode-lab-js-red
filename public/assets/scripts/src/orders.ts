@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import {getFirestore, onSnapshot, collection} from "firebase/firestore";
 import { OrdersService } from "./types/ordersService";
 import appendChild from "./functions/appendChild";
@@ -29,14 +29,40 @@ if(pageOrders) {
         renderOrders();
 
     });
+    
 
     const renderOrders = () => {
         
-        
-        
         listOrders.innerHTML = "";
+
         
-        orders.forEach(item => {
+        orders.forEach((item, index) => {
+
+            item.orderNumber = (index + 1);
+
+            // if(item.hamburgers) {
+
+            //     let content = JSON.parse(item.hamburgers);
+
+            //     // let a =  JSON.stringify(content)
+                
+            //     // console.log(a);
+
+            //     var obj = JSON.parse(item.hamburgers);
+
+            //     var teste = JSON.stringify(obj)
+
+            //     teste.map(ingredient=> ingredient.price)
+
+            //     // console.log(Object.keys(obj));
+            //     // console.log(Object.values(obj));
+
+            
+                  
+
+
+            // }
+             
 
             const dateFormated = parse(item.date, 'yyyy-MM-dd', new Date());
             
