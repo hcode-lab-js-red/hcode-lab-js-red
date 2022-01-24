@@ -1,101 +1,20 @@
-import { hu } from "date-fns/locale";
-import appendChild from "./functions/appendChild";
 import formatCurrency from "./functions/formatCurrency";
-import { AnyObject } from "./types/anyObject";
-import { Bread } from "./types/bread";
 import { Ingredient } from "./types/ingredient";
-import { OrderService } from "./types/orderService";
-
+import {getFirestore, onSnapshot, collection} from "firebase/firestore";
+import {breadOptionType} from "./types/breadOptions"
 
 const page = document.querySelector("#menu") as HTMLElement;
 const formCreateHamburger = document.querySelector('#create-hamburger') as HTMLFormElement;
+const breadOptions = document.querySelector("#breads ul") as HTMLDivElement;
+const ingredients = document.querySelector("#ingredients ul") as HTMLDivElement;
+
+let breads: breadOptionType[] = [];
+let breadIngredients: breadOptionType[] = [];
+const db = getFirestore();
+
 if(page){
 
-    const breads:Ingredient[] = [{
-            id:1,
-            name:'Pão Tradicional',
-            price:2
-        },
-        {
-            id:2,
-            name:'Pão Australiano',
-            price:3
-        },
-        {
-            id:3,
-            name:'Pão de Batata',
-            price:2.5
-        },
-        {
-            id:4,
-            name:'Pão de Dinamite',
-            price:5
-        },
-
-    ];
-
-
-    const ingredients:Ingredient[] = [
-        {
-            id:1,
-            name:"Carne Bovina 125g",
-            price:3
-        },
-        {
-            id:2,
-            name:"Carne de Frango 125g",
-            price:2.5
-        },
-        {
-            id:3,
-            name:"Carne de Peixe 125g",
-            price:2
-        },
-        {
-            id:4,
-            name:"Folha de Alface",
-            price:1
-        },
-        {
-            id:5,
-            name:"Tomate",
-            price:1
-        },
-        {
-            id:6,
-            name:"Picles",
-            price:1
-        },
-        {
-            id:7,
-            name:"Queijo Cheddar 50g",
-            price:2.5
-        },
-        {
-            id:8,
-            name:"Queijo Mussarela 50g",
-            price:2
-        },
-        {
-            id:9,
-            name:"Molho Barbecue",
-            price:1.5
-        },
-
-        {
-            id:10,
-            name:"Molho da Casa",
-            price:2
-        },
-
-    ];
-
- 
-
     // listar pães
-    const listBreads = page.querySelector("#breads ul") as HTMLLIElement;
-    listBreads.innerHTML = "";
-
     const renderBreads = () => {
 
         breads.forEach(bread =>{
@@ -118,13 +37,39 @@ if(page){
         });
     };
 
+    const listBreads = page.querySelector("#breads ul") as HTMLLIElement;
+    listBreads.innerHTML = "";
+    if(breadOptions){
+        breadOptions.innerHTML = "";
+        onSnapshot(collection(db, "breadOptions"), (collection) => {
+          breads = [];
+          collection.forEach((el) => {
+            breads.push(el.data() as breadOptionType);
+          });          
+          renderBreads();
+        });
+    }
+    
+
     //listar ingredients
 
     const listIngredients = page.querySelector("#ingredients ul")as HTMLLIElement;
-          listIngredients.innerHTML = "";
+    listIngredients.innerHTML = "";
+
+    if(ingredients){
+        ingredients.innerHTML = "";
+        onSnapshot(collection(db, "ingredientsOptions"), (collection) => {
+          breadIngredients = [];
+          collection.forEach((el) => {
+            breadIngredients.push(el.data() as breadOptionType);
+          });
+          
+          renderIngredients();
+        });
+    }        
 
     const renderIngredients = () => {
-        ingredients.forEach(ingredient=>{
+        breadIngredients.forEach(ingredient=>{
 
             const ingredienteEl = document.createElement('li') as HTMLLIElement;
 
@@ -229,16 +174,19 @@ if(page){
         });
         
         currentTray.push(hamburger); //coloca na bandeja
+        const currentTrayFiltered = currentTray.filter(hamburger=>{
+            return hamburger.length !== 0;
+        });
 
-        localStorage.setItem("allOrders", JSON.stringify(currentTray));
+        const deleteBurguer = document.querySelector("#deleteBurguer");
+        
+        localStorage.setItem("allOrders", JSON.stringify(currentTrayFiltered));
 
         formCreateHamburger.reset();
 
         renderTray();
 
     });
-
-    
 
 }
 
