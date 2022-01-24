@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="assets/images/logo-favicon-red.svg" type="image/x-icon" />
 </head>
 <body id="app" class="no-footer">
+    <div class="backdrop"></div>
 
     <section>
 
@@ -30,6 +31,14 @@
 
     </section>
     <script type="text/html" id="tpl-label">
+            <div class="modal m-${item.orderNumber}">
+                <div class="modal-content">
+                    <button type="button" class="modal-close-button">&times;</button>
+                    <span class="modal-title">Resumo do Pedido ${item.orderNumber}</span>
+                    ${item.hamburgers}
+                    <span class="total-resumo"><strong>Total do pedido: ${item.priceFormated}</strong></span>
+                </div>
+            </div>
             <div class="id"># ${item.orderNumber}</div>
             <div class="content">
                 <div class="title">Detalhes do Pedido</div>
@@ -50,9 +59,6 @@
                          <span>N°:</span>
                          <span>${item.orderNumber}</span>
                      </li>
-                     <!-- <li>
-                         ${item.hamburgers}
-                     </li> -->
                 </ul>
             </div>
             <div class="actions">

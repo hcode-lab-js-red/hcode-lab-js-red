@@ -6,6 +6,14 @@ import { cartaoBanco } from "./types/cartaoBanco";
 import IMask from "imask";
 import appendChild from "./functions/appendChild";
 import formatCurrency from "./functions/formatCurrency";
+import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import { format } from "date-fns";
+import { Ingredient } from "./types/ingredient";
+import { getAuth } from "firebase/auth";
+
+let db = getFirestore();
+const hoje = new Date();
+const auth = getAuth();
 
 
 const page = document.querySelector(".page-pay") as HTMLElement;
@@ -87,7 +95,31 @@ if (page) {
       bancoEL.appendChild(option);
   });
 
-  const valorTotal = 100;
+
+      //Obtem os dados do localStorage
+      const getLocalStorage = ():(Ingredient[])[]=>{
+        try{
+            const localAllOders = JSON.parse(localStorage.getItem('allOrders') as string);
+            if(!localAllOders){
+              location.href="index.html";
+            }
+            return localAllOders as (Ingredient[])[];
+        }catch(err){
+            console.error(err);
+            return [] as (Ingredient[])[];
+        }
+      }
+    //Calcula o valor total
+      const currentTray = getLocalStorage();
+      let totalTray = 0;
+      // let listInredients: Ingredient[] = [];
+      currentTray.forEach((hamburger) =>{
+        const totalHamburger = hamburger.map(ingredient=> ingredient.price).reduce((a, b)=> a + b, 0);
+        totalTray += totalHamburger;
+    
+      });
+
+  const valorTotal = Number(totalTray);
   const maxInstallments = 6;
 
   parcelasEL.innerHTML = "";
@@ -114,13 +146,41 @@ if (page) {
 
   }
 
+
+    
+    
+
   const footer = document.querySelector<HTMLElement>("#send-pay");
 
   if (footer) {
 
     footer.addEventListener("click", e => {
 
-      console.log("Clique no botão COMFIRMAR PAGAMENTO")
+      console.log("Clique no botão COMFIRMAR PAGAMENTO");
+
+      var arrayToString = JSON.stringify(Object.assign({}, currentTray));
+      
+      (async () => {
+        try {
+            // Add a new document with a generated id.
+          const docRef = await addDoc(collection(db, "orders"), {
+            date: format(hoje, 'yyyy-MM-dd'),
+            quantity: currentTray.length,
+            price: valorTotal,
+            uid: auth.currentUser?.uid,
+            hamburgers: arrayToString,
+            });
+          console.log("Document written with ID: ", docRef.id);
+          const orderRef = doc(db, 'orders', docRef.id);
+          setDoc(orderRef, { orderId: docRef.id }, { merge: true });
+          localStorage.clear();
+          
+        } catch (e) {
+            // Deal with the fact the chain failed
+            console.error(e)
+            
+        }
+      })(); 
 
     });
   }

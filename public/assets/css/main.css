@@ -885,4 +885,67 @@ body, div, section, main, article, header, footer, form, label {
   }
 }
 
+.modal-content {
+  display: flex;
+  width: 300px;
+  min-height: 300px;
+  height: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: var(--space);
+}
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.modal-content ul li {
+  display: flex;
+  justify-content: space-between;
+}
+.modal-content ul li.title {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.modal-content .modal-close-button {
+  font-size: 32px;
+  width: 45px;
+  margin-left: auto;
+  border: none;
+}
+.modal-content .modal-title {
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+@media (min-width: 576px) {
+  .modal-content {
+    width: 500px;
+  }
+}
+
+.modal {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 99;
+}
+.modal.show {
+  display: flex;
+}
+
+.total-resumo {
+  display: block;
+  text-align: right;
+}
+
 /*# sourceMappingURL=main.css.map */
