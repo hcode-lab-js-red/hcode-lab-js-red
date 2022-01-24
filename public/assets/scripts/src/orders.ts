@@ -15,135 +15,135 @@ const auth = getAuth();
 
 const imgAvatar = document.querySelector('img#avatar') as HTMLImageElement;
 
-// Veriica status do login
-onAuthStateChanged(auth, () => {
-    // Se está logado continua, senão vai pro login
-    if (auth.currentUser) {
-        if(imgAvatar) {
-            imgAvatar.src = auth.currentUser.photoURL ?? "assets/images/user.svg";
-            imgAvatar.addEventListener("click", () => { location.href = "profile.html"})
-        }
+if(imgAvatar) {
+    imgAvatar.src = auth.currentUser?.photoURL ?? "assets/images/user.svg";
+    imgAvatar.addEventListener("click", () => { location.href = "profile.html"})
+}
 
-        const pageOrders = document.querySelector("#orders-page") as HTMLElement;
-        
-        if(pageOrders) {
-        
-            const db = getFirestore();
-            let orders: OrdersService[] = [];
-            const listOrders = document.querySelector("#list-orders") as HTMLUListElement;
-            const tpl = document.querySelector("#tpl-label") as HTMLScriptElement;
+const pageOrders = document.querySelector("#orders-page") as HTMLElement;
 
-            const allBtnDelete = pageOrders.querySelectorAll("[aria-label=Excluir]");
-            const allBtnDetail = pageOrders.querySelectorAll("[aria-label=Detalhes]");
-            const allBtnShare = pageOrders.querySelectorAll("[aria-label=Compartilhar]");
+if(pageOrders) {
 
-           
-        
-            onSnapshot(collection(db, "orders"), (collection) => {
-                
-                orders = [];
-        
-                collection.forEach((doc) => {
-                    orders.push((doc.data() as OrdersService));
-                    
-                });
-        
-                
-                renderOrders();
-        
-            });
+    const db = getFirestore();
+    let orders: OrdersService[] = [];
+    const listOrders = document.querySelector("#list-orders") as HTMLUListElement;
+    const tpl = document.querySelector("#tpl-label") as HTMLScriptElement;
 
+    const allBtnDelete = pageOrders.querySelectorAll("[aria-label=Excluir]");
+    const allBtnDetail = pageOrders.querySelectorAll("[aria-label=Detalhes]");
+    const allBtnShare = pageOrders.querySelectorAll("[aria-label=Compartilhar]");
+
+   
+
+    onSnapshot(collection(db, "orders"), (collection) => {
+        
+        orders = [];
+
+        collection.forEach((doc) => {
+            orders.push((doc.data() as OrdersService));
             
-            const renderOrders = () => {
-                
-                listOrders.innerHTML = "";
+        });
+
         
-                
-                orders.forEach((item, index) => {
+        renderOrders();
+
+    });
+
+    
+    const renderOrders = () => {
         
-                    item.orderNumber = (index + 1);
-                    let hamburgers = "";
+        listOrders.innerHTML = "";
+
         
-                    if(item.hamburgers) {
-        
-                        let content = JSON.parse(item.hamburgers);
+        orders.forEach((item, index) => {
 
-                       Object.values(content).forEach((hamb,indexh)=> {
+            item.orderNumber = (index + 1);
+            let hamburgers = "";
 
-                        hamburgers = hamburgers +=`<ul>`;
+            if(item.hamburgers) {
 
-                        hamburgers = hamburgers += `<li class="title">Hambúrguer ${indexh+1}</li>`
+                let content = JSON.parse(item.hamburgers);
 
-                           let objeto = Object.values(hamb as any);
+               Object.values(content).forEach((hamb,indexh)=> {
 
-                           Object.values(objeto).forEach((ing) => {
+                hamburgers = hamburgers +=`<ul>`;
 
-                            let ingredientes = ing as any;
+                hamburgers = hamburgers += `<li class="title">Hambúrguer ${indexh+1}</li>`
 
-                                item.hamburgers = hamburgers += `
-                                <li>
-                                <span>${ingredientes.name}</span>
-                                <span><strong>${formatCurrency(ingredientes.price)}</strong></span>
-                                </li>
-                                `
-                           })
+                   let objeto = Object.values(hamb as any);
 
-                           item.hamburgers = hamburgers += `</ul>`
+                   Object.values(objeto).forEach((ing) => {
+
+                    let ingredientes = ing as any;
+
+                        item.hamburgers = hamburgers += `
+                        <li>
+                        <span>${ingredientes.name}</span>
+                        <span><strong>${formatCurrency(ingredientes.price)}</strong></span>
+                        </li>
+                        `
+                   })
+
+                   item.hamburgers = hamburgers += `</ul>`
 
 
 
-                        });
-
-                    }
-        
-                    const dateFormated = parse(item.date, 'yyyy-MM-dd', new Date());
-                    
-                    item.dateFormated = format(dateFormated, "d'/'MM'/'yyyy");
-                    
-                    item.priceFormated = formatCurrency(item.price);
-
-                    let id = item.orderId
-        
-                    if(auth.currentUser) {
-        
-                        if (item.uid === auth.currentUser.uid) {
-            
-                            appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
-                        }
-
-                        allBtnDelete.forEach(btn => {
-                            btn.addEventListener("click",()=>{
-                               return deleteOrders(id)
-                            })
-                        })
-                    }
-        
                 });
 
-        
             }
 
-
-
-           
-
-            const deleteOrders = (id:string) => {
-
-                deleteDoc(doc(db, "orders", id));
-                
-            };
-
-                
+            const dateFormated = parse(item.date, 'yyyy-MM-dd', new Date());
             
-
-
-
-
+            item.dateFormated = format(dateFormated, "d'/'MM'/'yyyy");
             
-        }
-    } else {
-        location.href = "login.html";
+            item.priceFormated = formatCurrency(item.price);
+
+            let id = item.orderId
+
+            if(auth.currentUser) {
+
+                if (item.uid === auth.currentUser.uid) {
+    
+                    appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
+                }
+
+                allBtnDelete.forEach(btn => {
+                    btn.addEventListener("click",()=>{
+                       deleteOrders(id);
+                       console.log("aaa");
+                    })
+                })
+            }
+
+        });
+
+
     }
-});
+
+
+
+   
+
+    const deleteOrders = (id:string) => {
+        deleteDoc(doc(db, "orders", id));
+
+    };
+
+        
+    
+
+
+
+
+    
+}
+// // Veriica status do login
+// onAuthStateChanged(auth, () => {
+//     // Se está logado continua, senão vai pro login
+//     if (auth.currentUser) {
+//     } else {
+//         location.href = "login.html";
+//     }
+// });
 
 
