@@ -4,28 +4,21 @@ const auth = getAuth();
 const form = document.querySelector<HTMLFormElement>("#form-forget");
 
 if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    form.addEventListener("submit", e => {
+    const inputEmail = document.querySelector(
+      "#form-forget input"
+    ) as HTMLInputElement;
 
-        e.preventDefault();
+    const email = inputEmail.value;
 
-        const inputEmail = document.querySelector("#form-forget input") as HTMLInputElement;
-
-        const email = inputEmail.value;
-        
-        
-        if (email) {
-            
-            sendPasswordResetEmail(auth, email)
-            .then(() => {
-                
-                sessionStorage.setItem("email", email);
-
-            })
-            .catch((error) => console.error(error.message));
-
-        }
-
-    });
-
+    if (email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          sessionStorage.setItem("email", email);
+        })
+        .catch((error) => console.error(error.message));
+    }
+  });
 }
