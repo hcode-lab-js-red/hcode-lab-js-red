@@ -966,4 +966,10 @@ body, div, section, main, article, header, footer, form, label {
   border-radius: 8px;
 }
 
+.aguarde {
+  text-align: center;
+  color: #000;
+  margin-top: 25px;
+}
+
 /*# sourceMappingURL=main.css.map */
