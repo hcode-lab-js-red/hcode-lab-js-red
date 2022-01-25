@@ -176,20 +176,6 @@ if (page) {
   ) as HTMLButtonElement;
 
   saveOrder?.addEventListener("click", () => {
-    (async () => {
-      try {
-        // Add a new document with a generated id.
-        const docRef = await addDoc(collection(db, "tray"), {
-          //adicionar objeto
-        });
-        const orderRef = doc(db, "tray", docRef.id);
-        setDoc(orderRef, { orderId: docRef.id }, { merge: true });
-      } catch (e) {
-        // Deal with the fact the chain failed
-        console.error(e);
-      }
-    })();
-
     const allEls = page.querySelectorAll("[name=item]") as NodeList;
 
     // sendLocalStorange();
@@ -204,6 +190,19 @@ if (page) {
           elSelect.dataset.ingredients as string
         );
         hamburger.push(jsonIngredient);
+        const addTray = async () => {
+          try {
+            // Add a new document with a generated id.
+            const docRef = await addDoc(collection(db, "tray"), { hamburger });
+            const orderRef = doc(db, "tray", docRef.id);
+            setDoc(orderRef, { hamburger });
+          } catch (e) {
+            // Deal with the fact the chain failed
+            console.error(e);
+          }
+        };
+
+        return addTray();
       }
     });
 
