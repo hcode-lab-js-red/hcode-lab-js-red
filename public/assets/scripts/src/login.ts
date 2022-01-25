@@ -5,17 +5,13 @@ const auth = getAuth();
 const form = document.querySelector<HTMLFormElement>("#form-login");
 
 if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    form.addEventListener("submit", e => {
+    const { email, password } = getFormValues(form);
 
-        e.preventDefault();
-
-        const { email, password } = getFormValues(form);
-
-        signInWithEmailAndPassword(auth, email, password)
-            .then(() => location.href = "/")
-            .catch((error) => console.error(error.message));
-
-    });
-
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => (location.href = "/"))
+      .catch((error) => console.error(error.message));
+  });
 }
