@@ -948,4 +948,8 @@ body, div, section, main, article, header, footer, form, label {
   text-align: right;
 }
 
+.flex {
+  display: flex;
+}
+
 /*# sourceMappingURL=main.css.map */
