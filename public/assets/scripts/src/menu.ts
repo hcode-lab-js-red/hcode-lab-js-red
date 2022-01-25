@@ -190,12 +190,20 @@ if (page) {
           elSelect.dataset.ingredients as string
         );
         hamburger.push(jsonIngredient);
+      }
+    });
+
+    currentTray.push(hamburger); //coloca na bandeja
+    const currentTrayFiltered = currentTray.filter((hamburger) => {
+      if (hamburger.length > 1) {
         const addTray = async () => {
           try {
             // Add a new document with a generated id.
-            const docRef = await addDoc(collection(db, "tray"), { hamburger });
+            const docRef = await addDoc(collection(db, "tray"), {
+              ...hamburger,
+            });
             const orderRef = doc(db, "tray", docRef.id);
-            setDoc(orderRef, { hamburger });
+            setDoc(orderRef, { id: docRef.id, ...hamburger });
           } catch (e) {
             // Deal with the fact the chain failed
             console.error(e);
@@ -204,11 +212,6 @@ if (page) {
 
         return addTray();
       }
-    });
-
-    currentTray.push(hamburger); //coloca na bandeja
-    const currentTrayFiltered = currentTray.filter((hamburger) => {
-      return hamburger.length > 1;
     });
 
     localStorage.setItem("allOrders", JSON.stringify(currentTrayFiltered));
