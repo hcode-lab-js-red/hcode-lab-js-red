@@ -4,7 +4,6 @@ import {
   getFirestore,
   onSnapshot,
   collection,
-  Firestore,
   setDoc,
   doc,
   addDoc,
@@ -207,6 +206,7 @@ if (page) {
     });
 
     currentTray.push(hamburger); //coloca na bandeja
+
     const currentTrayFiltered = currentTray.filter((hamburger) => {
       return hamburger.length > 1;
     });
