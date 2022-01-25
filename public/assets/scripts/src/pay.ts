@@ -142,10 +142,9 @@ if (page) {
 
     option.innerText = `
       ${parcela} parcela${parcela > 1 ? "s" : ""} 
-      de ${
-        parcela >= 2
-          ? formatCurrency(porcentagePorParcela)
-          : formatCurrency(totalPorParcela)
+      de ${parcela >= 2
+        ? formatCurrency(porcentagePorParcela)
+        : formatCurrency(totalPorParcela)
       } 
       
       ${parcela > 1 ? " TOTAL " : "à vista"} 
@@ -184,4 +183,14 @@ if (page) {
       })();
     });
   }
+
+  // Envia para página de orders
+  const ordersClient = document.querySelector("#send-pay");
+
+  if (ordersClient) {
+    ordersClient.addEventListener("click", () => {
+      location.href = "orders.html";
+    });
+  }
+
 }
