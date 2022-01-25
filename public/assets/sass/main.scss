@@ -71,3 +71,17 @@
     display: flex;
 }
 
+.button-share {
+    background-color: red;
+    color: var(--white);
+    padding: 10px;
+    display: block;
+    width: 250px;
+    margin: 10px auto;
+    position: relative;
+    z-index: 12;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+}
+

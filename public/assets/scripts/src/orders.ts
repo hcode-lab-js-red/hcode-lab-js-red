@@ -174,13 +174,7 @@ if(pageOrders) {
                 });
             });
 
-            allBtnShare.forEach((btn) => {
-                btn.addEventListener("click",()=>{
-                    // deleteOrder(idPedido)
-                    console.log("Clique no botão Compartilhar");
-                    
-                });
-            });
+           
 
             allBtnDetail.forEach((btn) => {
                 btn.addEventListener("click",()=>{
@@ -194,8 +188,17 @@ if(pageOrders) {
                 });
             });
             
-            const allModal = listOrders.querySelectorAll(".modal") as NodeListOf<HTMLDivElement>;
+            const allModal = document.querySelectorAll(".modal") as NodeListOf<HTMLDivElement>;
 
+            allBtnShare.forEach((btn) => {
+                btn.addEventListener("click",()=>{
+
+                    const modal = document.querySelector("#modal-share")
+                    modal?.classList.add("flex");
+                    console.log("Clique no botão Compartilhar");
+                    
+                });
+            });
 
             allModalCloseButton.forEach((btn) => {
 
@@ -209,13 +212,13 @@ if(pageOrders) {
                     });
 
                 });
-                    
 
-                    
                     console.log("Clique no botão Detalhes");
                     // console.log(idAtual)
                     
             });
+
+           
 
             
         }

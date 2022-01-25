@@ -27,9 +27,19 @@
             </header>
             <ul id="list-orders">
             </ul>
+            <div class="modal" id="modal-share">
+                <div class="modal-content">
+                    <button type="button" class="modal-close-button">&times;</button>
+                    <div>
+                        <a class="button-share" href="mailto:exemple@example.com.br">Compartilhar por e-mail</a>
+                        <a class="button-share" href="">Compartilhar por WhatsApp</a>
+                    </div>
+                </div>
+            </div>
         </main>
 
     </section>
+
     <script type="text/html" id="tpl-label">
             <div class="modal" id="modal-${item.orderId}">
                 <div class="modal-content">
