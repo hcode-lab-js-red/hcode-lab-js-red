@@ -7,5 +7,5 @@ export type OrdersService = {
     dateFormated: string;
     uid: string;
     hamburgers: string;
-    orderId: string
+    orderId: string;
 }

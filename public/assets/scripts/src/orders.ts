@@ -8,6 +8,8 @@ import { parse } from "date-fns";
 
 import { doc, deleteDoc } from "firebase/firestore";
 import { where } from "firebase/firestore";
+import { id } from "date-fns/locale";
+import { getMetadata } from "firebase/storage";
 
 
 
@@ -29,10 +31,6 @@ if(pageOrders) {
     const listOrders = document.querySelector("#list-orders") as HTMLUListElement;
     const tpl = document.querySelector("#tpl-label") as HTMLScriptElement;
 
-    const allBtnDelete = pageOrders.querySelectorAll("[aria-label=Excluir]");
-    const allBtnDetail = pageOrders.querySelectorAll("[aria-label=Detalhes]");
-    const allBtnShare = pageOrders.querySelectorAll("[aria-label=Compartilhar]");
-
    
 
     onSnapshot(collection(db, "orders"), (collection) => {
@@ -40,14 +38,35 @@ if(pageOrders) {
         orders = [];
 
         collection.forEach((doc) => {
-            orders.push((doc.data() as OrdersService));
+
+            let data = doc.data();
+
+
+            if(auth.currentUser) {
+
+                if (data.uid === auth.currentUser.uid) {
+    
+                    orders.push((doc.data() as OrdersService));
+                    
+                }
+                
+            }
+
             
         });
 
         
         renderOrders();
 
+        getData();
+
     });
+
+   
+
+
+
+    
 
     
     const renderOrders = () => {
@@ -98,45 +117,92 @@ if(pageOrders) {
             
             item.priceFormated = formatCurrency(item.price);
 
-            let id = item.orderId
+            const orderId: string = item.orderId;
 
-            if(auth.currentUser) {
+            // if(auth.currentUser) {
 
-                if (item.uid === auth.currentUser.uid) {
+            //     if (item.uid === auth.currentUser.uid) {
     
                     appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
-                }
-
-                allBtnDelete.forEach(btn => {
-                    btn.addEventListener("click",()=>{
-                       deleteOrders(id);
-                       console.log("aaa");
-                    })
-                })
-            }
+            //     }
+                
+            // }
 
         });
 
 
     }
 
+    const getData = () => {
+
+    const allBtnDelete = pageOrders.querySelectorAll("#btn-delete") as NodeList;
+    const allBtnDetail = pageOrders.querySelectorAll("[aria-label=Detalhes]") as NodeListOf<HTMLButtonElement>;
+    const allBtnShare = pageOrders.querySelectorAll("[aria-label=Compartilhar]") as NodeListOf<HTMLButtonElement>;
+
+    if (pageOrders) {
+
+        const listOrders = pageOrders.querySelector("#list-orders") as HTMLUListElement;
+
+         function deleteOrder(id:string) {
+            return deleteDoc(doc(db, "orders", id))
+        }
+
+        // if(listOrders) {
+            
+        //     let getOrderId = listOrders.querySelectorAll("li .id");
+
+        //         listOrders.querySelectorAll("li .id");
+        //         getOrderId.forEach(id => {
+        //             let idPedido = id.getAttribute("id");
+        //             console.log(idPedido);
+
+        //         })
+
+        //     }
+            
+            allBtnDelete.forEach((btn) => {
+                btn.addEventListener("click",()=>{
+                    const liAtual = btn.parentNode?.parentElement
+                    const id = liAtual?.querySelector(".id")
+                    const idAtual = id?.getAttribute("id") as string
+                    // console.log("Clique no botão deletar");
+                    deleteOrder(idAtual)
+                    // console.log("Deletado");
+                    
+                });
+            });
+
+            allBtnShare.forEach((btn) => {
+                btn.addEventListener("click",()=>{
+                    // deleteOrder(idPedido)
+                    console.log("Clique no botão Compartilhar");
+                    
+                });
+            });
+
+            allBtnDetail.forEach((btn) => {
+                btn.addEventListener("click",()=>{
+                    const liAtual = btn.parentNode?.parentElement
+                    const id = liAtual?.querySelector(".id")
+                    const idAtual = id?.getAttribute("id-") as string
+                    console.log("Clique no botão Detalhes");
+                    
+                });
+            });
+
+            
+        }
 
 
-   
-
-    const deleteOrders = (id:string) => {
-        deleteDoc(doc(db, "orders", id));
-
-    };
-
-        
-    
+    }
 
 
 
 
     
 }
+
+
 // // Veriica status do login
 // onAuthStateChanged(auth, () => {
 //     // Se está logado continua, senão vai pro login
