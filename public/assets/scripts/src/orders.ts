@@ -10,6 +10,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { where } from "firebase/firestore";
 import { id } from "date-fns/locale";
 import { getMetadata } from "firebase/storage";
+import { AnyObject } from "./types/anyObject";
 
 const auth = getAuth();
 
@@ -24,7 +25,6 @@ if (imgAvatar) {
 
 const pageOrders = document.querySelector("#orders-page") as HTMLElement;
 
-<<<<<<< HEAD
 if (pageOrders) {
   const db = getFirestore();
   let orders: OrdersService[] = [];
@@ -44,59 +44,6 @@ if (pageOrders) {
 
     renderOrders();
   });
-=======
-if(pageOrders) {
-
-    const db = getFirestore();
-    let orders: OrdersService[] = [];
-    const listOrders = document.querySelector("#list-orders") as HTMLUListElement;
-    const tpl = document.querySelector("#tpl-label") as HTMLScriptElement;
-
-   
-
-    onSnapshot(collection(db, "orders"), (collection) => {
-        
-        orders = [];
-
-        collection.forEach((doc) => {
-
-            let data = doc.data();
-
-
-            if(auth.currentUser) {
-
-                if (data.uid === auth.currentUser.uid) {
-    
-                    orders.push((doc.data() as OrdersService));
-                    
-                }
-                
-            }
-
-            
-        });
-
-        
-        renderOrders();
-
-        getData();
-
-    });
-
-   
-
-
-
-    
-
-    
-    const renderOrders = () => {
-        
-        listOrders.innerHTML = "";
-
-        
-        orders.forEach((item, index) => {
->>>>>>> 160c8f2bb647fea16c83bac21fafbac75427d4cd
 
   const renderOrders = () => {
     listOrders.innerHTML = "";
@@ -127,38 +74,8 @@ if(pageOrders) {
                           ingredientes.price
                         )}</strong></span>
                         </li>
-<<<<<<< HEAD
                         `;
           });
-=======
-                        `
-                   })
-
-                   item.hamburgers = hamburgers += `</ul>`
-
-
-
-                });
-
-            }
-
-            const dateFormated = parse(item.date, 'yyyy-MM-dd', new Date());
-            
-            item.dateFormated = format(dateFormated, "d'/'MM'/'yyyy");
-            
-            item.priceFormated = formatCurrency(item.price);
-
-            const orderId: string = item.orderId;
-
-            // if(auth.currentUser) {
-
-            //     if (item.uid === auth.currentUser.uid) {
-    
-                    appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
-            //     }
-                
-            // }
->>>>>>> 160c8f2bb647fea16c83bac21fafbac75427d4cd
 
           item.hamburgers = hamburgers += `</ul>`;
         });
@@ -166,76 +83,9 @@ if(pageOrders) {
 
       const dateFormated = parse(item.date, "yyyy-MM-dd", new Date());
 
-<<<<<<< HEAD
       item.dateFormated = format(dateFormated, "d'/'MM'/'yyyy");
 
       item.priceFormated = formatCurrency(item.price);
-=======
-    }
-
-    const getData = () => {
-
-    const allBtnDelete = pageOrders.querySelectorAll("#btn-delete") as NodeList;
-    const allBtnDetail = pageOrders.querySelectorAll("[aria-label=Detalhes]") as NodeListOf<HTMLButtonElement>;
-    const allBtnShare = pageOrders.querySelectorAll("[aria-label=Compartilhar]") as NodeListOf<HTMLButtonElement>;
-
-    if (pageOrders) {
-
-        const listOrders = pageOrders.querySelector("#list-orders") as HTMLUListElement;
-
-         function deleteOrder(id:string) {
-            return deleteDoc(doc(db, "orders", id))
-        }
-
-        // if(listOrders) {
-            
-        //     let getOrderId = listOrders.querySelectorAll("li .id");
-
-        //         listOrders.querySelectorAll("li .id");
-        //         getOrderId.forEach(id => {
-        //             let idPedido = id.getAttribute("id");
-        //             console.log(idPedido);
-
-        //         })
-
-        //     }
-            
-            allBtnDelete.forEach((btn) => {
-                btn.addEventListener("click",()=>{
-                    const liAtual = btn.parentNode?.parentElement
-                    const id = liAtual?.querySelector(".id")
-                    const idAtual = id?.getAttribute("id") as string
-                    // console.log("Clique no botão deletar");
-                    deleteOrder(idAtual)
-                    // console.log("Deletado");
-                    
-                });
-            });
-
-            allBtnShare.forEach((btn) => {
-                btn.addEventListener("click",()=>{
-                    // deleteOrder(idPedido)
-                    console.log("Clique no botão Compartilhar");
-                    
-                });
-            });
-
-            allBtnDetail.forEach((btn) => {
-                btn.addEventListener("click",()=>{
-                    const liAtual = btn.parentNode?.parentElement
-                    const id = liAtual?.querySelector(".id")
-                    const idAtual = id?.getAttribute("id-") as string
-                    console.log("Clique no botão Detalhes");
-                    
-                });
-            });
-
-            
-        }
-
-
-    }
->>>>>>> 160c8f2bb647fea16c83bac21fafbac75427d4cd
 
       let id = item.orderId;
 
@@ -258,18 +108,3 @@ if(pageOrders) {
     deleteDoc(doc(db, "orders", id));
   };
 }
-<<<<<<< HEAD
-=======
-
-
-// // Veriica status do login
-// onAuthStateChanged(auth, () => {
-//     // Se está logado continua, senão vai pro login
-//     if (auth.currentUser) {
-//     } else {
-//         location.href = "login.html";
-//     }
-// });
-
-
->>>>>>> 160c8f2bb647fea16c83bac21fafbac75427d4cd
