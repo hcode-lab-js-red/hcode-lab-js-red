@@ -6,6 +6,24 @@
     <meta name="description" content="Projeto Hburger do Hcode Lab" />
     <title>HBurguer</title>
     <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+        .top-profile {
+            padding: 30px 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .top-profile {
+                width: 360px;
+            }
+        }
+        .top-profile button {
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+        }
+    </style>
     <link rel="shortcut icon" href="assets/images/logo-favicon-red.svg" type="image/x-icon" />
 </head>
 <body id="app">
@@ -17,13 +35,22 @@
                 <img src="assets/images/logo-icon-red.svg" alt="Logo Icone" id="logo-icon" />
                 <img src="assets/images/logo-text-red.svg" alt="Logo Texto" id="logo-text" />
             </a>
-            <button class="button-logout">Sair</button>
+            
         </header>
 
         <main>
             <header>
                 <h1>Minha Conta</h1>
             </header>
+            <div class="top-profile">
+
+                <button class="button-logout">Sair</button>
+                <br>
+                <h3>Meus pedidos</h3>
+                <button type="button" class="go-to-orders">Ver meus pedidos</button>
+                <br>
+
+            </div>
             <form id="form-update">
                 <h3>Sua Foto de Perfil</h3>
                 <img src="assets/images/user.svg" alt="photo" id="photo-preview" width="150px" height="150px" />
@@ -33,6 +60,7 @@
 
               <div>
               </div>
+              
               <h3>Edite seus dados</h3>
               <input type="text" name="name" placeholder="Nome" required />
               <input type="email" name="email" placeholder="E-mail" required />

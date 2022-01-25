@@ -158,6 +158,7 @@ if (page) {
 
   const modalWait = document.querySelector("#wait") as HTMLDivElement;
   const modalWaitText = document.querySelector("#wait p") as HTMLParagraphElement;
+  const closeModal = modalWait.querySelector("button") as HTMLButtonElement
 
   if (footer) {
     footer.addEventListener("click", (e) => {
@@ -202,6 +203,10 @@ if (page) {
         modalWait?.classList.add("flex");
 
         modalWaitText.innerText = "Preencha corretamente todos os campos";
+
+        closeModal.addEventListener("click", () => {
+          modalWait.classList.remove("flex")
+        })
       }
 
     });

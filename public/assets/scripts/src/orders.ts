@@ -10,7 +10,6 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { where } from "firebase/firestore";
 import { id } from "date-fns/locale";
 import { getMetadata } from "firebase/storage";
-import { AnyObject } from "./types/anyObject";
 
 
 
@@ -24,7 +23,6 @@ if(imgAvatar) {
 }
 
 const pageOrders = document.querySelector("#orders-page") as HTMLElement;
-
 
 if(pageOrders) {
 
@@ -78,7 +76,6 @@ if(pageOrders) {
         
         orders.forEach((item, index) => {
 
-
             item.orderNumber = (index + 1);
             let hamburgers = "";
 
@@ -103,7 +100,6 @@ if(pageOrders) {
                         <span>${ingredientes.name}</span>
                         <span><strong>${formatCurrency(ingredientes.price)}</strong></span>
                         </li>
-
                         `
                    })
 
@@ -123,20 +119,12 @@ if(pageOrders) {
 
             const orderId: string = item.orderId;
 
-            // if(auth.currentUser) {
-
-            //     if (item.uid === auth.currentUser.uid) {
     
                     appendChild("li", eval("`"+ tpl.innerText + "`"), listOrders);
-            //     }
-                
-            // }
 
 
         });
 
-.priceFormated = formatCurrency(item.price);
-=======
 
     }
 
@@ -234,9 +222,10 @@ if(pageOrders) {
     }
 
 
+
+
     
 }
-
 
 
 // // Veriica status do login
