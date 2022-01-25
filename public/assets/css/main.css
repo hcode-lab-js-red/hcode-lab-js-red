@@ -948,4 +948,28 @@ body, div, section, main, article, header, footer, form, label {
   text-align: right;
 }
 
+.flex {
+  display: flex;
+}
+
+.button-share {
+  background-color: red;
+  color: var(--white);
+  padding: 10px;
+  display: block;
+  width: 250px;
+  margin: 10px auto;
+  position: relative;
+  z-index: 12;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.aguarde {
+  text-align: center;
+  color: #000;
+  margin-top: 25px;
+}
+
 /*# sourceMappingURL=main.css.map */
