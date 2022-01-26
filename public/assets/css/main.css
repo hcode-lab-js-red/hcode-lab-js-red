@@ -847,7 +847,7 @@ body, div, section, main, article, header, footer, form, label {
   color: var(--white);
   padding: 10px;
   display: block;
-  max-width: 250px;
+  max-width: 100%;
   margin: 10px auto;
   position: relative;
   z-index: 12;
@@ -946,6 +946,30 @@ body, div, section, main, article, header, footer, form, label {
 .total-resumo {
   display: block;
   text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.button-share {
+  background-color: red;
+  color: var(--white);
+  padding: 10px;
+  display: block;
+  width: 250px;
+  margin: 10px auto;
+  position: relative;
+  z-index: 12;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.aguarde {
+  text-align: center;
+  color: #000;
+  margin-top: 25px;
 }
 
 /*# sourceMappingURL=main.css.map */

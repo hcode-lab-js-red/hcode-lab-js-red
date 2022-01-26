@@ -142,10 +142,9 @@ if (page) {
 
     option.innerText = `
       ${parcela} parcela${parcela > 1 ? "s" : ""} 
-      de ${
-        parcela >= 2
-          ? formatCurrency(porcentagePorParcela)
-          : formatCurrency(totalPorParcela)
+      de ${parcela >= 2
+        ? formatCurrency(porcentagePorParcela)
+        : formatCurrency(totalPorParcela)
       } 
       
       ${parcela > 1 ? " TOTAL " : "à vista"} 
@@ -157,31 +156,62 @@ if (page) {
 
   const footer = document.querySelector<HTMLElement>("#send-pay");
 
+  const modalWait = document.querySelector("#wait") as HTMLDivElement;
+  const modalWaitText = document.querySelector("#wait p") as HTMLParagraphElement;
+  const closeModal = modalWait.querySelector("button") as HTMLButtonElement
+
   if (footer) {
     footer.addEventListener("click", (e) => {
-      console.log("Clique no botão COMFIRMAR PAGAMENTO");
 
-      var arrayToString = JSON.stringify(Object.assign({}, currentTray));
+      if((nome.value || number.value || validate.value || code.value) !== "") {
+        // console.log("Clique no botão COMFIRMAR PAGAMENTO");
 
-      (async () => {
-        try {
-          // Add a new document with a generated id.
-          const docRef = await addDoc(collection(db, "orders"), {
-            date: format(hoje, "yyyy-MM-dd"),
-            quantity: currentTray.length,
-            price: valorTotal,
-            uid: auth.currentUser?.uid,
-            hamburgers: arrayToString,
-          });
-          console.log("Document written with ID: ", docRef.id);
-          const orderRef = doc(db, "orders", docRef.id);
-          setDoc(orderRef, { orderId: docRef.id }, { merge: true });
-          localStorage.clear();
-        } catch (e) {
-          // Deal with the fact the chain failed
-          console.error(e);
-        }
-      })();
+        var arrayToString = JSON.stringify(Object.assign({}, currentTray));
+        
+  
+        (async () => {
+          try {
+            // Add a new document with a generated id.
+            const docRef = await addDoc(collection(db, "orders"), {
+              date: format(hoje, "yyyy-MM-dd"),
+              quantity: currentTray.length,
+              price: valorTotal,
+              uid: auth.currentUser?.uid,
+              hamburgers: arrayToString,
+            });
+
+            modalWait?.classList.add("flex");
+            modalWaitText.innerText = "Processando o pagamento... Por favor, aguarde."
+
+            console.log("Document written with ID: ", docRef.id);
+
+            const orderRef = doc(db, "orders", docRef.id);
+
+            setDoc(orderRef, { orderId: docRef.id }, { merge: true });
+
+            localStorage.clear();
+            // Envia para página de orders
+            setTimeout(() => {
+              location.href = "./orders.html"
+          }, 2000);
+          } catch (e) {
+            // Deal with the fact the chain failed
+            console.error(e);
+          }
+        })();
+      } else {
+        modalWait?.classList.add("flex");
+
+        modalWaitText.innerText = "Preencha corretamente todos os campos";
+
+        closeModal.addEventListener("click", () => {
+          modalWait.classList.remove("flex")
+        })
+      }
+
     });
   }
+
+  
+
 }

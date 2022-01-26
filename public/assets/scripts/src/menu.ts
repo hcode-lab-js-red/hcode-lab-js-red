@@ -255,7 +255,6 @@ if (page) {
           elSelect.dataset.ingredients as string
         );
         hamburger.push(jsonIngredient);
-        
       }
     });
 
@@ -269,7 +268,9 @@ if (page) {
               ...hamburger,
             });
             const orderRef = doc(db, "tray", docRef.id);
+
             setDoc( orderRef, {id: docRef.id, ingredients: hamburger} );
+
           } catch (e) {
             // Deal with the fact the chain failed
             console.error(e);
@@ -280,9 +281,11 @@ if (page) {
       }
     });
 
+
     localStorage.setItem("allOrders", JSON.stringify(currentTrayFiltered));
     // localStorage.setItem("currentTrays", JSON.stringify(currentTrays));
     
+
     formCreateHamburger.reset();
 
     renderTray();
