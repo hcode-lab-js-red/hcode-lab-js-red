@@ -282,8 +282,9 @@ if (page) {
     });
 
 
-    // localStorage.setItem("allOrders", JSON.stringify(currentTrayFiltered)); // estava gerando duplicatas desnecessárias
-
+    localStorage.setItem("allOrders", JSON.stringify(currentTrayFiltered));
+    // localStorage.setItem("currentTrays", JSON.stringify(currentTrays));
+    
 
     formCreateHamburger.reset();
 
