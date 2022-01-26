@@ -140,13 +140,12 @@ if (page) {
   orderElList.innerHTML = "";
 
   const tray = aside.querySelector("header small") as HTMLElement;
-  tray.innerText = "esta vazia.";
+  tray.innerText = "está vazia.";
 
   onSnapshot(collection(db, "tray"), (collection) => {
     currentTrays = [];
     collection.forEach((el) => {
       currentTrays.push(el.data() as Ingredient);
-      console.log(el.data().id)
     });
     renderTray();
   }); //trás a bandeja do banco
@@ -159,11 +158,12 @@ if (page) {
 
     orderElList.innerHTML = "";
 
-    currentTrays.forEach((hamburger: Ingredient, index) => {
-    
-      tray.innerText = `${index + 1} Hamburguers`;
-    
+    const hamburgers = currentTrays.length;
 
+    tray.innerText = hamburgers ? `${currentTrays.length} Hamburguers` : 'está vazia';
+
+    currentTrays.forEach((hamburger: Ingredient, index) => {   
+      
       // let fireHamburger = hamburger as Ingredient;
 
       const hamburgerEl = document.createElement("li");
@@ -173,23 +173,28 @@ if (page) {
         
       }).reduce((a: number, b: number) => a + b, 0);
 
-      const formatTotalHamburguer = formatCurrency(totalHamburger);
+      if(!isNaN (totalHamburger)){
+
+        const formatTotalHamburguer = formatCurrency(totalHamburger);
+
+        hamburgerEl.innerHTML = `
+        <div>Hamburguer ${index + 1}</div>
+        <div> ${formatTotalHamburguer}</div> 
+        <button type="button" aria-label="Remover Hamburguer ${index + 1}" value="${hamburger.id}" class="delete-burger">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"/>
+            </svg>
+        </button>
+       `;
+
+       totalTray += totalHamburger;
+
+       orderElList.appendChild(hamburgerEl);
+
+      }
+     
 
       
-
-      hamburgerEl.innerHTML = `
-                <div>Hamburguer ${index + 1}</div>
-                <div> ${formatTotalHamburguer}</div> 
-                <button type="button" aria-label="Remover Hamburguer ${index + 1}" value="${hamburger.id}" class="delete-burger">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="black"/>
-                    </svg>
-                </button>
-            `;
-
-      totalTray += totalHamburger;
-
-      orderElList.appendChild(hamburgerEl);
 
       const deleteBurger = hamburgerEl.querySelector(".delete-burger") as HTMLButtonElement;
       
